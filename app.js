@@ -168,6 +168,30 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
       });
     }
     
+    // "math" command
+    if (data.name === 'math') {
+      const expr = data.options.find(opt => opt.name === 'expression').value;
+      const safeExpr = expr.replace(/[^-()\d/*+.]/g, '');
+    
+      try {
+        const result = Function(`return (${safeExpr})`)();
+        return res.send({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            content: `🧮 Result: ${expr} = **${result}**`,
+          },
+        });
+      } catch (err) {
+        return res.send({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            content: '⚠️ Could not evaluate the expression.',
+          },
+        });
+      }
+    }
+    
+    
     
 
     console.error(`unknown command: ${name}`);

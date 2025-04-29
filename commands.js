@@ -94,7 +94,25 @@ const PING_COMMAND = {
   contexts: [0, 1, 2],
 };
 
+// Math command
+const MATH_COMMAND = {
+  name: 'math',
+  description: 'Calculate a basic math expression (e.g., 5 + 2 * 3)',
+  type: 1,
+  options: [
+    {
+      type: 3, // STRING
+      name: 'expression',
+      description: 'The math expression to evaluate (e.g. 5 + 2 * 3)',
+      required: true,
+    },
+  ],
+  integration_types: [0, 1],
+  contexts: [0, 1, 2],
+};
 
-const ALL_COMMANDS = [TEST_COMMAND, CHALLENGE_COMMAND, FLIP_COMMAND, DICE_COMMAND, UPTIME_COMMAND, PING_COMMAND];
+
+
+const ALL_COMMANDS = [TEST_COMMAND, CHALLENGE_COMMAND, FLIP_COMMAND, DICE_COMMAND, UPTIME_COMMAND, PING_COMMAND, MATH_COMMAND];
 
 InstallGlobalCommands(process.env.APP_ID, ALL_COMMANDS);

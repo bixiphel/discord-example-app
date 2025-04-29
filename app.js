@@ -237,6 +237,52 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
       });
     }
     
+    // "hex" command
+    if (name === 'hex') {
+      const direction = data.options.find(opt => opt.name === 'direction')?.value;
+      const input = data.options.find(opt => opt.name === 'input')?.value;
+    
+      if (!direction || !input) {
+        return res.send({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            content: '⚠️ Missing direction or input.',
+          },
+        });
+      }
+    
+      let result;
+      try {
+        if (direction === 'encode') {
+          result = input
+            .split('')
+            .map(char => char.charCodeAt(0).toString(16).padStart(2, '0'))
+            .join(' ');
+        } else if (direction === 'decode') {
+          result = input
+            .split(' ')
+            .map(hex => String.fromCharCode(parseInt(hex, 16)))
+            .join('');
+        } else {
+          throw new Error('Invalid direction');
+        }
+      } catch (err) {
+        return res.send({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            content: '⚠️ Could not convert the input. Make sure it\'s valid hex or text.',
+          },
+        });
+      }
+    
+      return res.send({
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          content: `🔢 **${direction === 'encode' ? 'Hex' : 'Text'} Result:**\n\`\`\`\n${result}\n\`\`\``,
+        },
+      });
+    }
+    
     
 
     console.error(`unknown command: ${name}`);

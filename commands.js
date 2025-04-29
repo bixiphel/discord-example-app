@@ -123,8 +123,16 @@ const BINARY_COMMAND = {
       type: 3, // STRING
       required: true,
       choices: [
-        { name: 'Encode', value: 'encode' },
-        { name: 'Decode', value: 'decode' }
+        { 
+          name: 'Encode', 
+          value: 'encode',
+          description: 'Converts (ASCII) text to binary' 
+        },
+        { 
+          name: 'Decode', 
+          value: 'decode',
+          description: 'Converts binary strings to ASCII characters'
+        }
       ]
     },
     {
@@ -136,7 +144,40 @@ const BINARY_COMMAND = {
   ]
 }
 
+// toHex command
+const HEX_COMMAND = {
+  name: 'hex',
+  description: 'Encode or decode hexadecimal',
+  type: 1,
+  options: [
+    {
+      name: 'direction',
+      description: 'Encode to hex or decode from hex',
+      type: 3, // STRING
+      required: true,
+      choices: [
+        { 
+          name: 'Encode', 
+          value: 'encode',
+          description: 'Converts ASCII text to its hexadecimal representation'
+        },
+        { name: 'Decode', 
+          value: 'decode',
+          description: 'Converts hex values to ASCII characters'
+        }
+      ]
+    },
+    {
+      name: 'input',
+      description: 'The text or hex to convert',
+      type: 3, // STRING
+      required: true
+    }
+  ]
+}
 
-const ALL_COMMANDS = [BINARY_COMMAND, TEST_COMMAND, CHALLENGE_COMMAND, FLIP_COMMAND, DICE_COMMAND, UPTIME_COMMAND, PING_COMMAND, MATH_COMMAND];
+
+
+const ALL_COMMANDS = [HEX_COMMAND, BINARY_COMMAND, TEST_COMMAND, CHALLENGE_COMMAND, FLIP_COMMAND, DICE_COMMAND, UPTIME_COMMAND, PING_COMMAND, MATH_COMMAND];
 
 InstallGlobalCommands(process.env.APP_ID, ALL_COMMANDS);

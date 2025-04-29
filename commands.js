@@ -176,8 +176,42 @@ const HEX_COMMAND = {
   ]
 }
 
+// sort command
+const SORT_COMMAND = {
+  name: 'sort',
+  description: 'Sorts a list of numbers in ascending order',
+  type: 1,
+  options: [
+    {
+      name: 'input',
+      description: 'Comma-separated list of numbers',
+      type: 3, // STRING
+      required: true
+    }
+  ]
+}
+
+// fibonacci command
+const FIBONACCI_COMMAND = {
+  name: 'fibonacci',
+  description: 'Generates the first N Fibonacci numbers',
+  type: 1,
+  options: [
+    {
+      name: 'n',
+      description: 'How many Fibonacci numbers to return',
+      type: 4, // INTEGER
+      required: true,
+      min_value: 1,
+      max_value: 100 // limit to avoid abuse
+    }
+  ]
+}
 
 
-const ALL_COMMANDS = [HEX_COMMAND, BINARY_COMMAND, TEST_COMMAND, CHALLENGE_COMMAND, FLIP_COMMAND, DICE_COMMAND, UPTIME_COMMAND, PING_COMMAND, MATH_COMMAND];
+
+
+
+const ALL_COMMANDS = [FIBONACCI_COMMAND, SORT_COMMAND, HEX_COMMAND, BINARY_COMMAND, TEST_COMMAND, CHALLENGE_COMMAND, FLIP_COMMAND, DICE_COMMAND, UPTIME_COMMAND, PING_COMMAND, MATH_COMMAND];
 
 InstallGlobalCommands(process.env.APP_ID, ALL_COMMANDS);

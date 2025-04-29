@@ -283,6 +283,67 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
       });
     }
     
+    // "sort" command
+    if (name === 'sort') {
+      const input = data.options.find(opt => opt.name === 'input')?.value;
+    
+      try {
+        const numbers = input
+          .split(',')
+          .map(n => parseFloat(n.trim()))
+          .filter(n => !isNaN(n));
+    
+        if (numbers.length === 0) {
+          throw new Error('No valid numbers found');
+        }
+    
+        const sorted = numbers.sort((a, b) => a - b);
+    
+        return res.send({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            content: `🔢 Sorted result:\n\`\`\`\n${sorted.join(', ')}\n\`\`\``,
+          },
+        });
+      } catch (err) {
+        console.error('Error in sort command:', err);
+        return res.send({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            content: '⚠️ Could not parse the numbers. Please enter a comma-separated list like `5, 2, 9, 1`.',
+          },
+        });
+      }
+    }
+
+    // "fibonacci" command
+    if (name === 'fibonacci') {
+      const n = data.options.find(opt => opt.name === 'n')?.value;
+    
+      if (n < 1 || n > 100) {
+        return res.send({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            content: '⚠️ Please choose a number between 1 and 250.',
+          },
+        });
+      }
+    
+      const fib = [0, 1];
+      for (let i = 2; i < n; i++) {
+        fib.push(fib[i - 1] + fib[i - 2]);
+      }
+    
+      const result = fib.slice(0, n).join(', ');
+    
+      return res.send({
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          content: `🔢 First ${n} Fibonacci numbers:\n\`\`\`\n${result}\n\`\`\``,
+        },
+      });
+    }
+        
     
 
     console.error(`unknown command: ${name}`);

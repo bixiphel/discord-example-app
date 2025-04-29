@@ -30,6 +30,11 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
   // Interaction type and data
   const { type, id, data } = req.body;
 
+  // Used to measure total latency between the time the user sends a command to when the bot replies
+  // *Note that this includes the time it takes for the bot to respond to the command *PLUS* the time it takes to interact with the Discord API.
+  const receivedAt = Date.now();
+  console.log("Received at: " + receivedAt);
+
   /**
    * Handle verification requests
    */
@@ -147,6 +152,22 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
         },
       });
     }
+
+    // "ping" command
+    if (data.name === 'ping') {
+      const processingEnd = Date.now();
+      const latency = processingEnd - receivedAt;
+      console.log("Processed at: " + processingEnd);
+      console.log("Time difference: " + (processingEnd - receivedAt));
+    
+      return res.send({
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          content: `🏓 Pong! Total latency: ${latency}ms`,
+        },
+      });
+    }
+    
     
 
     console.error(`unknown command: ${name}`);

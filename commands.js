@@ -111,8 +111,32 @@ const MATH_COMMAND = {
   contexts: [0, 1, 2],
 };
 
+// toBinary command
+const BINARY_COMMAND = {
+  name: 'binary',
+  description: 'Encode or decode binary',
+  type: 1,
+  options: [
+    {
+      name: 'direction',
+      description: 'Encode to binary or decode from binary',
+      type: 3, // STRING
+      required: true,
+      choices: [
+        { name: 'Encode', value: 'encode' },
+        { name: 'Decode', value: 'decode' }
+      ]
+    },
+    {
+      name: 'input',
+      description: 'The text or binary to convert',
+      type: 3, // STRING
+      required: true
+    }
+  ]
+}
 
 
-const ALL_COMMANDS = [TEST_COMMAND, CHALLENGE_COMMAND, FLIP_COMMAND, DICE_COMMAND, UPTIME_COMMAND, PING_COMMAND, MATH_COMMAND];
+const ALL_COMMANDS = [BINARY_COMMAND, TEST_COMMAND, CHALLENGE_COMMAND, FLIP_COMMAND, DICE_COMMAND, UPTIME_COMMAND, PING_COMMAND, MATH_COMMAND];
 
 InstallGlobalCommands(process.env.APP_ID, ALL_COMMANDS);

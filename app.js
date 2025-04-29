@@ -191,6 +191,51 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
       }
     }
     
+    // "binary" command
+    if (name === 'binary') {
+      const direction = data.options.find(opt => opt.name === 'direction')?.value;
+      const input = data.options.find(opt => opt.name === 'input')?.value;
+    
+      if (!direction || !input) {
+        return res.send({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            content: '⚠️ Missing direction or input.',
+          },
+        });
+      }
+    
+      let result;
+      try {
+        if (direction === 'encode') {
+          result = input
+            .split('')
+            .map(char => char.charCodeAt(0).toString(2).padStart(8, '0'))
+            .join(' ');
+        } else if (direction === 'decode') {
+          result = input
+            .split(' ')
+            .map(bin => String.fromCharCode(parseInt(bin, 2)))
+            .join('');
+        } else {
+          throw new Error('Invalid direction');
+        }
+      } catch (err) {
+        return res.send({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            content: '⚠️ Could not convert the input. Make sure it\'s valid.',
+          },
+        });
+      }
+    
+      return res.send({
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          content: `🧠 **${direction === 'encode' ? 'Binary' : 'Text'} Result:**\n\`\`\`\n${result}\n\`\`\``,
+        },
+      });
+    }
     
     
 

@@ -91,19 +91,16 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
       });
     }
 
-    // "test" command
-    if (name === 'hello') {
-      // Send a message into the channel where command was triggered from
-      for(let i = 0; i < 50; i++) {
-        return res.send({
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            // Fetches a random emoji to send from a helper function
-            content: `hello! :3`,
-            },
-        });
-      }
-    }
+    // "flip" command
+    if (data.name === 'flip') {
+      const result = Math.random() < 0.5 ? '🪙 Heads!' : '🪙 Tails!';
+      return res.send({
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          content: result,
+        },
+      });
+    }  
 
     console.error(`unknown command: ${name}`);
     return res.status(400).json({ error: 'unknown command' });

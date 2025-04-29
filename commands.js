@@ -44,15 +44,15 @@ const CHALLENGE_COMMAND = {
   contexts: [0, 2],
 };
 
-// Simple test command
-const HELLO_COMMAND = {
-  name: 'hello',
-  description: 'Says hello back :)',
+// Flip coin command
+const FLIP_COMMAND = {
+  name: 'flip',
+  description: 'Flip a coin!',
   type: 1,
   integration_types: [0, 1],
   contexts: [0, 1, 2],
 };
 
-const ALL_COMMANDS = [TEST_COMMAND, CHALLENGE_COMMAND, HELLO_COMMAND];
+const ALL_COMMANDS = [TEST_COMMAND, CHALLENGE_COMMAND, FLIP_COMMAND];
 
 InstallGlobalCommands(process.env.APP_ID, ALL_COMMANDS);

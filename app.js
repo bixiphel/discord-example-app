@@ -11,6 +11,9 @@ import {
 import { getRandomEmoji, DiscordRequest } from './utils.js';
 import { getShuffledOptions, getResult } from './game.js';
 
+// Tracks the app's uptime
+const START_TIME = Date.now();
+
 // Create an express app
 const app = express();
 // Get port, or default to 3000
@@ -120,6 +123,31 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
         },
       });
     }
+
+    // "uptime" command
+    if (data.name === 'uptime') {
+      const uptimeMs = Date.now() - START_TIME;
+      const seconds = Math.floor((uptimeMs / 1000) % 60);
+      const minutes = Math.floor((uptimeMs / (1000 * 60)) % 60);
+      const hours = Math.floor((uptimeMs / (1000 * 60 * 60)) % 24);
+      const days = Math.floor(uptimeMs / (1000 * 60 * 60 * 24));
+    
+      const parts = [];
+      if (days) parts.push(`${days}d`);
+      if (hours) parts.push(`${hours}h`);
+      if (minutes) parts.push(`${minutes}m`);
+      if (seconds || parts.length === 0) parts.push(`${seconds}s`);
+    
+      const formatted = parts.join(' ');
+    
+      return res.send({
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          content: `⏱️ Uptime: ${formatted}`,
+        },
+      });
+    }
+    
 
     console.error(`unknown command: ${name}`);
     return res.status(400).json({ error: 'unknown command' });

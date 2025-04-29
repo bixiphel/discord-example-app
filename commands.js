@@ -76,6 +76,15 @@ const DICE_COMMAND = {
   contexts: [0, 1, 2],
 };
 
-const ALL_COMMANDS = [TEST_COMMAND, CHALLENGE_COMMAND, FLIP_COMMAND, DICE_COMMAND];
+// Uptime command
+const UPTIME_COMMAND = {
+  name: 'uptime',
+  description: 'Show how long the bot has been running',
+  type: 1,
+  integration_types: [0, 1],
+  contexts: [0, 1, 2],
+};
+
+const ALL_COMMANDS = [TEST_COMMAND, CHALLENGE_COMMAND, FLIP_COMMAND, DICE_COMMAND, UPTIME_COMMAND];
 
 InstallGlobalCommands(process.env.APP_ID, ALL_COMMANDS);

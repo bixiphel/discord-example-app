@@ -105,13 +105,18 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
     // "roll" command
     if (data.name === 'roll') {
       const sidesOption = data.options?.find(opt => opt.name === 'sides');
-      const sides = sidesOption ? sidesOption.value : 6;
-      const roll = Math.floor(Math.random() * sides) + 1;
-      
+      const countOption = data.options?.find(opt => opt.name === 'count');
+    
+      const sides = sidesOption ? Math.max(2, sidesOption.value) : 6;
+      const count = countOption ? Math.min(Math.max(1, countOption.value), 100) : 1;
+    
+      const rolls = Array.from({ length: count }, () => Math.floor(Math.random() * sides) + 1);
+      const total = rolls.reduce((sum, val) => sum + val, 0);
+    
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
-          content: `🎲 You rolled a ${roll} (1-${sides})`,
+          content: `🎲 Rolled ${count} d${sides}: [${rolls.join(', ')}] → Total: **${total}**`,
         },
       });
     }

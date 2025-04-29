@@ -65,6 +65,12 @@ const DICE_COMMAND = {
       description: 'Number of sides on the die (default is 6)',
       required: false,
     },
+    {
+      type: 4, // INTEGER
+      name: 'count',
+      description: 'Number of dice to roll (default is 1, max is 100)',
+      required: false,
+    },
   ],
   integration_types: [0, 1],
   contexts: [0, 1, 2],

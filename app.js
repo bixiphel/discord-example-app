@@ -102,6 +102,20 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
       });
     }  
 
+    // "roll" command
+    if (data.name === 'roll') {
+      const sidesOption = data.options?.find(opt => opt.name === 'sides');
+      const sides = sidesOption ? sidesOption.value : 6;
+      const roll = Math.floor(Math.random() * sides) + 1;
+      
+      return res.send({
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          content: `🎲 You rolled a ${roll} (1-${sides})`,
+        },
+      });
+    }
+
     console.error(`unknown command: ${name}`);
     return res.status(400).json({ error: 'unknown command' });
   }

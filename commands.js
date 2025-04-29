@@ -53,6 +53,23 @@ const FLIP_COMMAND = {
   contexts: [0, 1, 2],
 };
 
-const ALL_COMMANDS = [TEST_COMMAND, CHALLENGE_COMMAND, FLIP_COMMAND];
+// Roll die command
+const DICE_COMMAND = {
+  name: 'roll',
+  description: 'Roll a die with optional number of sides',
+  type: 1,
+  options: [
+    {
+      type: 4, // INTEGER
+      name: 'sides',
+      description: 'Number of sides on the die (default is 6)',
+      required: false,
+    },
+  ],
+  integration_types: [0, 1],
+  contexts: [0, 1, 2],
+};
+
+const ALL_COMMANDS = [TEST_COMMAND, CHALLENGE_COMMAND, FLIP_COMMAND, DICE_COMMAND];
 
 InstallGlobalCommands(process.env.APP_ID, ALL_COMMANDS);
